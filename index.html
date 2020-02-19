@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Etch-A-Sketch (Black and White)</title>
+	<link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
+
+	<style>
+
+		@keyframes otherPageMove {
+			0% {
+				transform: translateX(0px);
+			}
+			33% {
+				transform: translateX(30px);
+			}
+			66% {
+				transform: translateX(0px);
+			}
+			100% {
+				transform: translateX(30px);
+			}
+		}
+
+		@keyframes otherPageMove2 {
+			0% {
+				transform: translateX(0px);
+			}
+			33% {
+				transform: translateX(-30px);
+			}
+			66% {
+				transform: translateX(0px);
+			}
+			100% {
+				transform: translateX(-30px);
+			}
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<script>
+
+		//Black and White Mode!
+		let body = document.querySelector('body')
+		body.setAttribute('style', 'width: 100%; height: 100vh; margin: 0px; padding: 0px; font-family: Tomorrow, sans-serif; position: relative; overflow: hidden;')
+
+		//Section to separate Black and White Mode and the Random colors Mode
+		let section = document.createElement('section')
+		section.style.cssText = 'width: 100%; height: 100%; background: rgb(32,34,134); background: linear-gradient(162deg, rgba(32,34,134,1) 0%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transition: 0.5s'
+		
+		//Creating the container element
+		let container = document.createElement('div')
+		container.setAttribute('class', 'container')
+		container.style.cssText = 'width: 600px; height: 600px; background-color: lightgray; margin-right: 100px;;'
+
+		//Creating a buttons container
+		let btnContainer = document.createElement('div')
+		btnContainer.setAttribute('style', 'width: 150px; height: 100vh; display: flex; justify-content: space-around; align-items: center; flex-direction: column;')
+
+		//Creating a button up container
+		let btnUp = document.createElement('div')
+		btnUp.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+		//Creating the move to the other page container
+		let btnMove = document.createElement('div')
+		btnMove.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+		//Creating a button down container
+		let btnDown = document.createElement('div')
+		btnDown.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+
+		//Creating button to add divs
+		let buttonDiv = document.createElement('div')
+		buttonDiv.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s;')
+		buttonDiv.innerHTML = 'Add divs!'
+		buttonDiv.setAttribute('onclick', 'createDiv()')
+		buttonDiv.setAttribute('onmouseover', 'scaleHover(this)')
+		buttonDiv.setAttribute('onmouseout', 'scaleOut(this)')
+
+		//Creating button to move to the other page
+		let buttonOtherPage = document.createElement('div')
+		buttonOtherPage.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; text-align: center')
+		buttonOtherPage.innerHTML = 'Random Color Mode'
+		buttonOtherPage.setAttribute('onclick', 'moveToPage()')
+		buttonOtherPage.setAttribute('onmouseover', 'scaleHoverOtherPage(this)')
+		buttonOtherPage.setAttribute('onmouseout', 'scaleOut(this)')
+
+		//Creating restart button
+		let buttonRestart = document.createElement('div')
+		buttonRestart.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s;')
+		buttonRestart.innerHTML = 'Clean!'
+		buttonRestart.setAttribute('onclick', 'cleanAll()')
+		buttonRestart.setAttribute('onmouseover', 'scaleHover(this)')
+		buttonRestart.setAttribute('onmouseout', 'scaleOut(this)')
+
+		//Add the container to the body
+		body.appendChild(section)
+
+		section.appendChild(container)
+		section.appendChild(btnContainer)
+
+		btnContainer.appendChild(btnUp)
+		btnContainer.appendChild(btnMove)
+		btnContainer.appendChild(btnDown)
+
+		btnUp.appendChild(buttonDiv)
+		btnMove.appendChild(buttonOtherPage)
+		btnDown.appendChild(buttonRestart)
+
+
+		
+		function createDiv() {
+
+			var cantDivs = document.querySelectorAll('.divs')
+			for (var i = 0; i <= cantDivs.length - 1; i++) {
+				cantDivs[i].remove()
+			}
+
+
+			let number = prompt('Enter the rows and columns number')
+
+			container.style.cssText = 'display: grid; grid-gap: 1px; width: 600px; height: 600px; margin-right: 100px; background-color: lightgray; padding: 1px; grid-template-columns: repeat(' + number + ', 1fr); grid-template-rows: repeat(' + number + ', 1fr);'
+
+			for (var i = 1; i <= number*number; i++) {
+				let divs = document.createElement('div')
+				divs.setAttribute('class', 'divs')
+				divs.setAttribute('onmouseover', 'changeDiv(this)')
+				divs.setAttribute('style', 'background-color: #81A8A0;')
+				container.appendChild(divs)
+			}
+
+		}
+
+		function changeDiv(e) {
+			e.style.cssText = 'background-color: hsl(0, 0%, ' + hsl() + '%);' 
+		}
+
+
+
+		let hslColor = -10
+		function hsl() {
+
+			hslColor = hslColor + 10
+
+			if (hslColor == 110) {
+				hslColor = 0
+			}
+
+			return hslColor
+		}
+
+
+		function cleanAll() {
+			var toStart = document.querySelectorAll('.divs')
+			for (var i = 0; i <= toStart.length - 1; i++) {
+				toStart[i].style.cssText = 'background-color: #81A8A0;'
+			}
+		}
+
+		function scaleHover(e) {
+			e.style.cssText = 'width: 140px; height: 140px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 23px; transition: 0.3s; text-align: center;'
+		}
+
+		function scaleHoverOtherPage(e) {
+			e.style.cssText = 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s; text-align: center; animation-name: otherPageMove; animation-duration: 0.5s; animation-fill-mode: forwards;'
+		}
+
+		function scaleOut(e) {
+			e.style.cssText = 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s; text-align: center;'
+		}
+
+		function moveToPage() {
+			section.style.cssText = 'width: 100%; height: 100%; background: rgb(32,34,134); background: linear-gradient(162deg, rgba(32,34,134,1) 0%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transform: translateX(-100%); transition: 0.5s'
+
+			section2.style.cssText = 'width: 100%; height: 100%; background: rgb(134,102,32);background: linear-gradient(162deg, rgba(134,102,32,1) 0%, rgba(49,140,141,1) 84%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transform: translateX(0vw); transition: 0.5s;'
+		}
+
+
+
+
+
+
+
+		//Random Colors Mode!
+
+
+		//Section to separate Black and White Mode and the Random colors Mode
+		let section2 = document.createElement('section')
+		section2.style.cssText = 'width: 100%; height: 100%; background: rgb(134,102,32);background: linear-gradient(162deg, rgba(134,102,32,1) 0%, rgba(49,140,141,1) 84%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transform: translateX(100vw); transition: 0.5s;'
+		
+		//Creating the container element
+		let container2 = document.createElement('div')
+		container2.setAttribute('class', 'container2')
+		container2.style.cssText = 'width: 600px; height: 600px; background-color: lightgray; margin-left: 100px; transition: 0.5s;'
+
+		//Creating a buttons container
+		let btnContainer2 = document.createElement('div')
+		btnContainer2.setAttribute('style', 'width: 150px; height: 100vh; display: flex; justify-content: space-around; align-items: center; flex-direction: column;')
+
+		//Creating a button up container
+		let btnUp2 = document.createElement('div')
+		btnUp2.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+		//Creating the move to the other page container
+		let btnMove2 = document.createElement('div')
+		btnMove2.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+		//Creating a button down container
+		let btnDown2 = document.createElement('div')
+		btnDown2.setAttribute('style', 'width: 150px; height: 50vh; display: flex; justify-content: center; align-items: center;')
+
+
+		//Creating button to add divs
+		let buttonDiv2 = document.createElement('div')
+		buttonDiv2.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s;')
+		buttonDiv2.innerHTML = 'Add divs!'
+		buttonDiv2.setAttribute('onclick', 'createDiv2()')
+		buttonDiv2.setAttribute('onmouseover', 'scaleHover2(this)')
+		buttonDiv2.setAttribute('onmouseout', 'scaleOut2(this)')
+
+		//Creating button to move to the other page
+		let buttonOtherPage2 = document.createElement('div')
+		buttonOtherPage2.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; text-align: center')
+		buttonOtherPage2.innerHTML = 'Black and White Mode'
+		buttonOtherPage2.setAttribute('onclick', 'moveToPage2()')
+		buttonOtherPage2.setAttribute('onmouseover', 'scaleHoverOtherPage2(this)')
+		buttonOtherPage2.setAttribute('onmouseout', 'scaleOut2(this)')
+
+		//Creating restart button
+		let buttonRestart2 = document.createElement('div')
+		buttonRestart2.setAttribute('style', 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s;')
+		buttonRestart2.innerHTML = 'Clean!'
+		buttonRestart2.setAttribute('onclick', 'cleanAll2()')
+		buttonRestart2.setAttribute('onmouseover', 'scaleHover2(this)')
+		buttonRestart2.setAttribute('onmouseout', 'scaleOut2(this)')
+
+
+		//Random Color Page
+		body.appendChild(section2)
+
+		section2.appendChild(btnContainer2)
+		section2.appendChild(container2)
+
+		btnContainer2.appendChild(btnUp2)
+		btnContainer2.appendChild(btnMove2)
+		btnContainer2.appendChild(btnDown2)
+
+		btnUp2.appendChild(buttonDiv2)
+		btnMove2.appendChild(buttonOtherPage2)
+		btnDown2.appendChild(buttonRestart2)
+
+
+
+		function createDiv2() {
+
+			var cantDivs2 = document.querySelectorAll('.divs2')
+			for (var i = 0; i <= cantDivs2.length - 1; i++) {
+				cantDivs2[i].remove()
+			}
+
+
+			let number2 = prompt('Enter the rows and columns number')
+
+			container2.style.cssText = 'display: grid; grid-gap: 1px; width: 600px; height: 600px; margin-left: 100px; background-color: lightgray; padding: 1px; grid-template-columns: repeat(' + number2 + ', 1fr); grid-template-rows: repeat(' + number2 + ', 1fr);'
+
+			for (var i = 1; i <= number2*number2; i++) {
+				let divs2 = document.createElement('div')
+				divs2.setAttribute('class', 'divs2')
+				divs2.setAttribute('onmouseover', 'changeDiv2(this)')
+				divs2.setAttribute('style', 'background-color: #81A8A0;')
+				container2.appendChild(divs2)
+			}
+
+		}
+
+		function changeDiv2(e) {
+			e.style.cssText = 'background-color: #' + num() + num() + num() + num() + num() + num() + ';' 
+		}
+
+
+		function num() {
+			var abc = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+			var x = Math.floor(Math.random() * 15)
+
+			return abc[x]
+		}
+
+		function cleanAll2() {
+			var toStart = document.querySelectorAll('.divs2')
+			for (var i = 0; i <= toStart.length - 1; i++) {
+				toStart[i].style.cssText = 'background-color: #81A8A0;'
+			}
+		}
+
+		function scaleHover2(e) {
+			e.style.cssText = 'width: 140px; height: 140px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 23px; transition: 0.3s; text-align: center;'
+		}
+
+		function scaleHoverOtherPage2(e) {
+			e.style.cssText = 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s; text-align: center; animation-name: otherPageMove2; animation-duration: 0.5s; animation-fill-mode: forwards;'
+		}
+
+		function scaleOut2(e) {
+			e.style.cssText = 'width: 150px; height: 150px; border-radius: 50%; background-color: lightgray; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 25px; transition: 0.3s; text-align: center;'
+		}
+
+		function moveToPage2() {
+			section.style.cssText = 'width: 100%; height: 100%; background: rgb(32,34,134); background: linear-gradient(162deg, rgba(32,34,134,1) 0%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transform: translateX(0%); transition: 0.5s'
+
+			section2.style.cssText = 'width: 100%; height: 100%; background: rgb(134,102,32);background: linear-gradient(162deg, rgba(134,102,32,1) 0%, rgba(49,140,141,1) 84%, rgba(17,154,181,1) 100%); display: flex; justify-content: center; align-items: center; position: absolute; transform: translateX(100vw); transition: 0.5s;'
+		}
+
+	</script>
+</body>
+</html>
